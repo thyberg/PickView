@@ -42,7 +42,7 @@ public class LoopView extends View {
     private Paint mTopBottomTextPaint;  //paint that draw top and bottom text
     private Paint mCenterTextPaint;  // paint that draw center text
     private Paint mCenterLinePaint;  // paint that draw line besides center text
-    private ArrayList mDataList;
+    private List mDataList;
     private int mTextSize;
     private int mMaxTextWidth;
     private int mMaxTextHeight;
@@ -63,6 +63,8 @@ public class LoopView extends View {
     private int mWidgetHeight;
     private int mCircularRadius;
     private int mWidgetWidth;
+
+    private int lastItemIndex;
 
 
     public Handler mHandler = new Handler(new Handler.Callback() {
@@ -179,7 +181,7 @@ public class LoopView extends View {
     private void measureTextWidthHeight() {
         Rect rect = new Rect();
         for (int i = 0; i < mDataList.size(); i++) {
-            String s1 = (String) mDataList.get(i);
+            String s1 = mDataList.get(i).toString();
             mCenterTextPaint.getTextBounds(s1, 0, s1.length(), rect);
             int textWidth = rect.width();
             if (textWidth > mMaxTextWidth) {
@@ -255,13 +257,13 @@ public class LoopView extends View {
                 if (templateItem > mDataList.size() - 1) {
                     templateItem = templateItem - mDataList.size();
                 }
-                itemCount[count] = (String) mDataList.get(templateItem);
+                itemCount[count] = mDataList.get(templateItem).toString();
             } else if (templateItem < 0) {
                 itemCount[count] = "";
             } else if (templateItem > mDataList.size() - 1) {
                 itemCount[count] = "";
             } else {
-                itemCount[count] = (String) mDataList.get(templateItem);
+                itemCount[count] = mDataList.get(templateItem).toString();
             }
             count++;
         }
@@ -317,7 +319,7 @@ public class LoopView extends View {
                     canvas.clipRect(0, 0, mWidgetWidth, (int) (itemHeight));
                     canvas.drawText(itemCount[count], mPaddingLeftRight, mMaxTextHeight, mCenterTextPaint);
                     //center one indicate selected item
-                    mSelectedItem = mDataList.indexOf(itemCount[count]);
+                    setSelectedItem(mDataList.indexOf(itemCount[count]));
                 }
                 canvas.restore();
             }
@@ -367,8 +369,8 @@ public class LoopView extends View {
      * All public method must be called before this method
      * @param list data list
      */
-    public final void setDataList(List<String> list) {
-        this.mDataList = (ArrayList) list;
+    public final void setDataList(List<?> list) {
+        this.mDataList = list;
         initData();
     }
 
@@ -376,6 +378,14 @@ public class LoopView extends View {
         return mSelectedItem;
     }
 
+    private void setSelectedItem(int item) {
+        mSelectedItem = item;
+        Log.d(TAG, "selected item = " + item);
+        if (mSelectedItem != lastItemIndex) {
+            mLoopListener.onItemSelect(item);
+            lastItemIndex = mSelectedItem;
+        }
+    }
 
     private void itemSelected() {
         if (mLoopListener != null) {
@@ -452,8 +462,8 @@ public class LoopView extends View {
         public final void run() {
             LoopScrollListener listener = LoopView.this.mLoopListener;
             int selectedItem = getSelectedItem();
-            mDataList.get(selectedItem);
-            listener.onItemSelect(selectedItem);
+//            mDataList.get(selectedItem);
+            listener.onItemSelected(selectedItem);
         }
     }
 
@@ -489,7 +499,6 @@ public class LoopView extends View {
             realOffset = (int) ((float) realTotalOffset * 0.1F);
 
             if (realOffset == 0) {
-
                 if (realTotalOffset < 0) {
                     realOffset = -1;
                 } else {
@@ -499,12 +508,11 @@ public class LoopView extends View {
             if (Math.abs(realTotalOffset) <= 0) {
                 cancelSchedule();
                 mHandler.sendEmptyMessage(MSG_SELECTED_ITEM);
-                return;
+                Log.d(TAG, "item = " + getSelectedItem());
             } else {
                 mTotalScrollY = mTotalScrollY + realOffset;
                 mHandler.sendEmptyMessage(MSG_INVALIDATE);
                 realTotalOffset = realTotalOffset - realOffset;
-                return;
             }
         }
     }

@@ -18,6 +18,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.PopupWindow;
 
+import com.bruce.pickerview.DefaultLoopScroll;
 import com.bruce.pickerview.LoopScrollListener;
 import com.bruce.pickerview.LoopView;
 import com.bruce.pickerview.R;
@@ -185,21 +186,21 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
 //        dayLoopView.setTextSize(25);
 
         //set checked listen
-        yearLoopView.setLoopListener(new LoopScrollListener() {
+        yearLoopView.setLoopListener(new DefaultLoopScroll() {
             @Override
             public void onItemSelect(int item) {
                 yearPos = item;
                 initDayPickerView();
             }
         });
-        monthLoopView.setLoopListener(new LoopScrollListener() {
+        monthLoopView.setLoopListener(new DefaultLoopScroll() {
             @Override
             public void onItemSelect(int item) {
                 monthPos = item;
                 initDayPickerView();
             }
         });
-        dayLoopView.setLoopListener(new LoopScrollListener() {
+        dayLoopView.setLoopListener(new DefaultLoopScroll() {
             @Override
             public void onItemSelect(int item) {
                 dayPos = item;
