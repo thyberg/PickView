@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
-import com.bruce.pickerview.LoopScrollListener;
+import com.bruce.pickerview.DefaultLoopScroll;
 import com.bruce.pickerview.LoopView;
 import com.bruce.pickerview.popwindow.DatePickerPopWin;
 
@@ -68,10 +68,9 @@ public class MainActivity extends AppCompatActivity{
         loopView = (LoopView) findViewById(R.id.loop_view);
         loopView.setInitPosition(2);
         loopView.setCanLoop(false);
-        loopView.setLoopListener(new LoopScrollListener() {
+        loopView.setLoopListener(new DefaultLoopScroll() {
             @Override
             public void onItemSelect(int item) {
-
             }
         });
         loopView.setTextSize(25);//must be called before setDateList

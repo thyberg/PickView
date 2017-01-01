@@ -29,10 +29,10 @@ public class LoopViewTest {
 
         loopView = new LoopView(mContext);
         loopView.setTextSize(12.0f);
-        loopView.setNotLoop();
+//        loopView.setNotLoop();
         Whitebox.setInternalState(loopView, "maxTextHeight", 12);
 
-        loopView.setArrayList(new ArrayList(Arrays.asList("1", "2", "3", "4", "5", "6", "7")));
+        loopView.setDataList(new ArrayList(Arrays.asList("1", "2", "3", "4", "5", "6", "7")));
         loopView.setInitPosition(3);
     }
 
