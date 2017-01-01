@@ -380,7 +380,6 @@ public class LoopView extends View {
 
     private void setSelectedItem(int item) {
         mSelectedItem = item;
-        Log.d(TAG, "selected item = " + item);
         if (mSelectedItem != lastItemIndex) {
             mLoopListener.onItemSelect(item);
             lastItemIndex = mSelectedItem;
@@ -508,7 +507,6 @@ public class LoopView extends View {
             if (Math.abs(realTotalOffset) <= 0) {
                 cancelSchedule();
                 mHandler.sendEmptyMessage(MSG_SELECTED_ITEM);
-                Log.d(TAG, "item = " + getSelectedItem());
             } else {
                 mTotalScrollY = mTotalScrollY + realOffset;
                 mHandler.sendEmptyMessage(MSG_INVALIDATE);
