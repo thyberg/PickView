@@ -369,7 +369,7 @@ public class LoopView extends View {
      * All public method must be called before this method
      * @param list data list
      */
-    public final void setDataList(List<?> list) {
+    public final void setDataList(List<String> list) {
         this.mDataList = list;
         initData();
     }
